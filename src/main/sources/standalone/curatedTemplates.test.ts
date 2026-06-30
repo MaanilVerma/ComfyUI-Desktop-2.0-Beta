@@ -39,11 +39,12 @@ describe('isPersistableTemplateId', () => {
 })
 
 describe('buildTemplateDeeplink', () => {
-  it('appends ?template=<id>&source=default and round-trips the id', () => {
+  it('appends ?template=<id>&source=default&open_trigger=starter_template and round-trips the id', () => {
     const out = buildTemplateDeeplink('http://127.0.0.1:8188/', 'flux_schnell')
     const parsed = new URL(out)
     expect(parsed.searchParams.get('template')).toBe('flux_schnell')
     expect(parsed.searchParams.get('source')).toBe('default')
+    expect(parsed.searchParams.get('open_trigger')).toBe('starter_template')
   })
 
   it('preserves an existing query and host/port', () => {

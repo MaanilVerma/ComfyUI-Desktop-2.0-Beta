@@ -69,7 +69,11 @@ export function thumbnailUrlFor(id: string, mediaSubtype: string): string | null
 
 /**
  * Decorate the ComfyUI URL so the frontend auto-opens `templateId` on first
- * launch (`?template=<id>&source=default`, read by `useTemplateUrlLoader`).
+ * launch (`?template=<id>&source=default&open_trigger=starter_template`, read by
+ * `useTemplateUrlLoader`). `open_trigger` declares this as an onboarding open so
+ * telemetry attributes it correctly rather than inferring from the host; its
+ * value must match `TemplateOpenTrigger.StarterTemplate` in the frontend, or the
+ * deeplink falls back to `shared_url`.
  * Returns the URL unchanged if it can't be parsed, so a malformed address still
  * launches (just without the auto-open). Pure + exported for unit testing.
  */
@@ -78,6 +82,7 @@ export function buildTemplateDeeplink(comfyUrl: string, templateId: string): str
     const url = new URL(comfyUrl)
     url.searchParams.set('template', templateId)
     url.searchParams.set('source', 'default')
+    url.searchParams.set('open_trigger', 'starter_template')
     return url.toString()
   } catch {
     return comfyUrl
